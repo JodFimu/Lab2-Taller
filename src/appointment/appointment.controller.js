@@ -1,7 +1,7 @@
 import Pet from "../pet/pet.model.js";
 import Appointment from "../appointment/appointment.model.js";
 import { parse } from "date-fns";
-
+ 
 export const saveAppointment = async (req, res) => {
   try {
     const data = req.body;
@@ -56,3 +56,76 @@ export const saveAppointment = async (req, res) => {
     }); 
   }
 };
+
+export const getAppointments = async (req, res) =>{ 
+  try{
+      const {uid} = req.params
+
+      const { limite = 5, desde = 0 } = req.query
+      const query = { user: uid }
+
+      const [total, appointments ] = await Promise.all([
+          Appointment.countDocuments(query),
+          Appointment.find(query)
+              .skip(Number(desde))
+              .limit(Number(limite))
+      ])
+
+      return res.status(200).json({
+          success: true,
+          total,
+          appointments
+      })
+  }catch(err){
+    console.log(err)
+    /*return res.status(500).json({
+        success: false,
+        message: "Error al obtener los usuarios",
+        error: err.message
+    })*/
+  }
+};
+
+export const updateAppointment = async (req, res) => {
+  try {
+      const { id } = req.params;
+      const  data  = req.body;
+
+      const appointment = await Appointment.findByIdAndUpdate(id, data, { new: true });
+
+      res.status(200).json({
+          success: true,
+          msg: 'Cita Actualizada',
+          appointment
+      });
+  } catch (err) {
+      res.status(500).json({
+          success: false,
+          msg: 'Error al actualizar la Cita',
+          error: err.message
+      });
+  }
+}
+
+export const updateStatusAppointment = async (req, res) => {
+  try {
+      const { id } = req.params;
+
+      const status= "CANCELLED"
+
+      const appointment = await Appointment.findByIdAndUpdate(id, {status: status} , { new: true });
+
+      res.status(200).json({
+          success: true,
+          msg: 'Cita Cancelada',
+          appointment
+      });
+  } catch (err) {
+      console.log(err)
+      res.status(500).json({
+          success: false,
+          msg: 'Error al cancelar la Cita',
+          error: err.message
+      });
+  }
+}

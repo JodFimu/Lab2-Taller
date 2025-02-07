@@ -1,5 +1,7 @@
 import { hash } from "argon2";
 import User from "./user.model.js"
+import fs from "fs/promises";
+
 
 export const getUserById = async (req, res) => {
     try{
@@ -127,3 +129,32 @@ export const updateUser = async (req, res) => {
         });
     }
 }
+
+export const updatePicture = async (req, res) =>{
+    try{
+        const { uid } = req.params
+        const { newProfilePicture } = req.file
+
+        const user = await User.findById(uid)
+
+        if(user.profilePicture){
+            const filePath = user.profilePicture;
+            await fs.unlink(filePath);
+        }
+
+        await User.findByIdAndUpdate(uid, {profilePicture: newProfilePicture}, {new: true})
+
+        res.status(200).json({
+            success: true,
+            msg: 'Foto actualizada',
+        });
+    }catch(err){
+        res.status(500).json({
+            success: false,
+            msg: 'Error al actualizar la foto del usuario',
+            error: err.message
+        });
+    }
+}
+
+
