@@ -7,6 +7,6 @@ const router = Router();
 router.post("/createAppointment", createAppointmentValidator, saveAppointment);
 router.get("/getAppointments/:uid", getAppointmentsValidator, getAppointments);
 router.put("/updateAppointment/:id", updateAppointmentValidator, updateAppointment);
-router.patch("/cancelAppointment/:id", cancelAppointmentValidator, updateStatusAppointment);
+router.delete("/cancelAppointment/:id", cancelAppointmentValidator, updateStatusAppointment);
 
 export default router;

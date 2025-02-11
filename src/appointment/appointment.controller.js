@@ -78,11 +78,11 @@ export const getAppointments = async (req, res) =>{
       })
   }catch(err){
     console.log(err)
-    /*return res.status(500).json({
+    return res.status(500).json({
         success: false,
         message: "Error al obtener los usuarios",
         error: err.message
-    })*/
+    })
   }
 };
 

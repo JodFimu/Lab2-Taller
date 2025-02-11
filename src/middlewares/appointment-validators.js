@@ -18,9 +18,9 @@ export const getAppointmentsValidator = [
 
 
 export const updateAppointmentValidator = [
-    param("id").isMongoId().withMessage("No es un ID válido de MongoDB"),
-    body("pet").isMongoId().withMessage("No es un ID válido de MongoDB"),
-    body("user").isMongoId().withMessage("No es un ID válido de MongoDB"),
+    param("id").optional().isMongoId().withMessage("No es un ID válido de MongoDB"),
+    body("pet").optional().isMongoId().withMessage("No es un ID válido de MongoDB"),
+    body("user").optional().isMongoId().withMessage("No es un ID válido de MongoDB"),
     validarCampos,
     handleErrors
 ]
